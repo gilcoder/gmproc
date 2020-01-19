@@ -52,15 +52,11 @@ class ClientServer:
 			pr = mp.Process(target=p.run, args=(p.id, p.queue, self.queue, p.params))
 			cqueue[p.id] = p.queue
 			p.process = pr
+			pr.start()
 
 		ps = mp.Process(target=self.server.run, args=(cqueue, self.queue))
 		ps.start()
 		time.sleep(self.clients_delay)
-
-		for k in ids:
-			c = self.targets[k]
-			if c.process is not None:
-				c.process.start()
 
 		ps.join()
 
